@@ -5,11 +5,14 @@ import config
 from binance.client import Client
 from binance.enums import *
 from datetime import datetime
-
+import time
 from flask import Flask, jsonify, request
 
 
 app = Flask(__name__)
+
+
+string1 ='fazendo teste'
 
 
 SOCKET = "wss://stream.binance.com:9443/ws/btcusdt@kline_1m"
@@ -20,12 +23,12 @@ RSI_OVERSOLD = 30 # 30
 TRADE_SYMBOL = 'BTCBRL'
 TRADE_QUANTITY = 0.000109 #BTC 0.000109 = R$22,00 #ETH 0.003
 
+
 closes = []
 in_position = False
 qtd_candle_closed = 0
 qtd_compra = 0
 qtd_venda = 0
-string1 = ''
 
 client = Client(config.API_KEY, config.API_SECRET)
 
@@ -33,6 +36,8 @@ client = Client(config.API_KEY, config.API_SECRET)
 raw_server_time = client.get_server_time()
 server_time = datetime.fromtimestamp(raw_server_time['serverTime']/1000.0)
 print(server_time)
+
+
 
 def order(side, quantity, symbol, order_type=ORDER_TYPE_MARKET):
     try:
@@ -46,9 +51,10 @@ def order(side, quantity, symbol, order_type=ORDER_TYPE_MARKET):
     return True
 
 
+
 def on_open(ws):
     print('opened connection')
-    string1 = 'Conexao Aberta'
+
 
 def on_close(ws):
     print('closed connection')
@@ -59,12 +65,12 @@ def on_message(ws, message):
     global qtd_candle_closed
     global qtd_venda, qtd_compra
 
+
     print('received message')
     print()
     print(f'Qtd venda: {qtd_venda}')
     print(f'Qtd compra: {qtd_compra}')
     print()
-    string1 = 'Mensagem recebida'
     json_message = json.loads(message)
     pprint.pprint(json_message)
 
@@ -74,6 +80,8 @@ def on_message(ws, message):
     close = candle['c']
 
     print(f'Quantidade de vezes que fechou: {qtd_candle_closed}')
+
+
 
     if is_candle_closed:
         print("candle closed at {}".format(close))
@@ -111,18 +119,41 @@ def on_message(ws, message):
                     if order_succeeded:
                         in_position = True
                         qtd_compra += 1
+    stop()
+    # return jsonify({"message": "Não entre em pânico!"})
+
+
+
+
+
+
 
 
 ws = websocket.WebSocketApp(SOCKET, on_open=on_open, on_close=on_close, on_message=on_message)
-ws.run_forever()
+app = Flask(__name__)
+
+
+def chamaRotina():
+    # ws.keep_running = False
+    ws.run_forever()
+
+@app.route('/teste')
+def stop():
+    time(5)
+    stuff = "<h2> style='text-align: center'>Welcome to Python Flask Web Server</he>"
+    time(5)
+    app.run(host='0.0.0.0', port=port)
+    return stuff
 
 
 @app.route('/')
 def nao_entre_em_panico():
-    if request.headers.get('Authorization') == '42':
-        return jsonify({"42": "a resposta para a vida, o universo e tudo mais"})
-    return jsonify({string1})
+    # if request.headers.get('Authorization') == '42':
+    #     return jsonify({"42": "a resposta para a vida, o universo e tudo mais"})
+    # return jsonify(string1)
+    chamaRotina()
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
