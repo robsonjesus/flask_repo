@@ -3,3 +3,9 @@ gunicorn
 django-heroku
 flask
 websockets
+python-binance
+datetime
+config
+TA-lib
+ujson
+numpy
