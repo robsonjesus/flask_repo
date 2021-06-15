@@ -6,6 +6,5 @@ websockets
 python-binance
 datetime
 config
-TA-lib
 ujson
 numpy
