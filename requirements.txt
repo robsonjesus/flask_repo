@@ -8,3 +8,4 @@ datetime
 config
 ujson
 numpy
+ta-lib
