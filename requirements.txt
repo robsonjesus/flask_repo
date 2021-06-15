@@ -2,10 +2,3 @@ django
 gunicorn
 django-heroku
 flask
-websocket
-json
-pprint
-numpy
-config
-binance
-datetima
