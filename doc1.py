@@ -28,6 +28,12 @@ qtd_candle_closed = 0
 qtd_compra = 0
 qtd_venda = 0
 valor_fechamento = 0
+moeda =''
+rsi_upper = 0
+rsi_lower = 0
+qtd_trade = 0.0
+last_rsi = 0
+
 
 client = Client(config.API_KEY, config.API_SECRET)
 
@@ -65,6 +71,9 @@ def on_message(ws, message):
     global closes, in_position, valor_fechamento
     global qtd_candle_closed
     global qtd_venda, qtd_compra
+    global moeda
+    global rsi_upper, rsi_lower, qtd_trade, last_rsi
+
 
 
     print('received message')
@@ -100,24 +109,24 @@ def on_message(ws, message):
             last_rsi = rsi[-1]
             print("the current rsi is {}".format(last_rsi))
 
-            if last_rsi > RSI_OVERBOUGHT:
+            if last_rsi > rsi_upper:
                 if in_position:
                     print("Overbought! Sell! Sell! Sell!")
                     # put binance sell logic here
-                    order_succeeded = order(SIDE_SELL, TRADE_QUANTITY, TRADE_SYMBOL)
+                    order_succeeded = order(SIDE_SELL, qtd_trade, moeda)
                     if order_succeeded:
                         in_position = False
                         qtd_venda += 1
                 else:
                     print("It is overbought, but we don't own any. Nothing to do.")
 
-            if last_rsi < RSI_OVERSOLD:
+            if last_rsi < rsi_lower:
                 if in_position:
                     print("It is oversold, but you already own it, nothing to do.")
                 else:
                     print("Oversold! Buy! Buy! Buy!")
                     # put binance buy order logic here
-                    order_succeeded = order(SIDE_BUY, TRADE_QUANTITY, TRADE_SYMBOL)
+                    order_succeeded = order(SIDE_BUY, qtd_trade, moeda)
                     if order_succeeded:
                         in_position = True
                         qtd_compra += 1
@@ -140,13 +149,21 @@ def home():
     global api_key
     global api_password
     global client
+    global moeda , rsi_upper, rsi_lower, qtd_trade
+
     if request.method == "POST":
         api_key = request.form.get("api_key")
         api_password = request.form.get("api_secret")
         moeda = request.form.get("moeda")
+        rsi_upper = request.form.get("rsi_upper")
+        rsi_lower = request.form.get("rsi_lower")
+        qtd_trade = float(request.form.get("qtd_trade"))
         print(api_key)
         print(api_password)
         print(moeda)
+        print(rsi_upper)
+        print(rsi_lower)
+        print(qtd_trade)
         client = Client(api_key, api_password)
         return redirect(url_for('principal'))
 
@@ -168,16 +185,17 @@ def principal():
 
 
     print('Estou rodando')
-    if trava == True:
+    if trava == False:
         t2 = threading.Thread(name="Hello", target=funcaoSocket)
         t2.start()
         trava = True
     return render_template('principal.html',
-                           title='Status',
-                           date=dt,
-                           operating_system='os',
-                           python_version='pyver', fechamento=qtd_candle_closed, valor=valor_fechamento,
-                           api_chave=api_key, api_senha=api_password)
+                           moeda=moeda,
+                           rsi_upper=rsi_upper,
+                           rsi_lower=rsi_lower,
+                           qtd_trade=qtd_trade, fechamento=qtd_candle_closed, valor=valor_fechamento,
+                           api_chave=api_key, api_senha=api_password, closes=closes, last_rsi=last_rsi)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

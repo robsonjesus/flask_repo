@@ -5,12 +5,15 @@
     <link rel="stylesheet" href='/static/main.css' />
   </head>
   <body>
-    <h1>{{title}}</h1>
-    Date: {{date}}
-    Operating system: {{operating_system}}
-    Python version: {{python_version}}
+    <h1>Configuração atual:</h1>
+    <h3>Simbolo selecionado: {{moeda}}
+    Margem de venda RSI > : {{rsi_upper}}
+    Margem de compra RSI < : {{rsi_lower}}
+      Volume de Trade: {{qtd_trade}}</h3>
     <h2>Fechamento: {{fechamento}}</h2>
     <h2>Valor Fechamento: {{valor}}</h2>
+    <h2>Fechamentos: {{closes}}</h2>
+    <h2>Ultimo RSI: {{last_rsi}}</h2>
     <h2>API KEY: {{api_chave}}</h2>
     <h2>API PASSWORD: {{api_senha}}</h2>
 
