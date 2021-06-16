@@ -2,7 +2,7 @@ django
 gunicorn
 django-heroku
 flask
-websockets
+dataplicity-websocket-client
 python-binance
 datetime
 config
