@@ -194,7 +194,7 @@ def principal():
                            rsi_upper=rsi_upper,
                            rsi_lower=rsi_lower,
                            qtd_trade=qtd_trade, fechamento=qtd_candle_closed, valor=valor_fechamento,
-                           api_chave=api_key, api_senha=api_password, closes=closes, last_rsi=last_rsi)
+                           api_chave=api_key, api_senha=api_password, closes=closes[-14:], last_rsi=last_rsi)
 
 
 if __name__ == "__main__":
