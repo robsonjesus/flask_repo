@@ -8,4 +8,4 @@ datetime
 config
 ujson
 numpy
-threading
+threadpoolctl
