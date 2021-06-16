@@ -1,16 +1,2 @@
-django
-gunicorn
-django-heroku
 flask
-dataplicity-websocket-client
-python-binance
-datetime
-config
-ujson
-numpy
-threadpoolctl
-Werkzeug
-requests
-urllib3
-regex
-Jinja2
+
