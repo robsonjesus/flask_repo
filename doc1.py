@@ -7,7 +7,7 @@ from binance.enums import *
 from datetime import datetime
 import time
 from flask import Flask, jsonify, request
-
+import threading
 
 app = Flask(__name__)
 
@@ -144,13 +144,27 @@ def stop():
     time(5)
     return stuff
 
+def testForThread1():
+    print('Olha deu certo')
+
+@app.route('/vamos')
+def testForThread2():
+    print('Olha executou junto')
+    return 'pagina vamos'
+
 
 @app.route('/')
 def nao_entre_em_panico():
     # if request.headers.get('Authorization') == '42':
     #     return jsonify({"42": "a resposta para a vida, o universo e tudo mais"})
     # return jsonify(string1)
-    chamaRotina()
+    t1 = threading.Thread(name="Hello1", target=testForThread1)  # tell thread what the target function is
+    # notice no function call braces for the function "testForThread1"
+    t1.start()  # tell the thread to execute the target function
+    t2 = threading.Thread(name="Hello1", target=testForThread2)
+    t2.start()
+    # chamaRotina()
+    return 'dasdasdas'
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
