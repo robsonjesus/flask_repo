@@ -9,3 +9,7 @@ config
 ujson
 numpy
 threadpoolctl
+Werkzeug
+requests
+urllib3
+regex

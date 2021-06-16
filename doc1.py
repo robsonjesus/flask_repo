@@ -1,22 +1,19 @@
-import os
 
 import websocket, json, pprint, talib, numpy
+from werkzeug.utils import redirect
+
 import config
 from binance.client import Client
 from binance.enums import *
+from flask import Flask, render_template, request, url_for
 from datetime import datetime
-import time
-from flask import Flask, jsonify, request
 import threading
+import time
+
 
 app = Flask(__name__)
 
-
-string1 ='fazendo teste'
-
-
 SOCKET = "wss://stream.binance.com:9443/ws/btcusdt@kline_1m"
-
 RSI_PERIOD = 14 # 14
 RSI_OVERBOUGHT = 70 # 70
 RSI_OVERSOLD = 30 # 30
@@ -29,6 +26,7 @@ in_position = False
 qtd_candle_closed = 0
 qtd_compra = 0
 qtd_venda = 0
+valor_fechamento = 0
 
 client = Client(config.API_KEY, config.API_SECRET)
 
@@ -38,6 +36,8 @@ server_time = datetime.fromtimestamp(raw_server_time['serverTime']/1000.0)
 print(server_time)
 
 
+
+###### Inicio WebSocket ############
 
 def order(side, quantity, symbol, order_type=ORDER_TYPE_MARKET):
     try:
@@ -61,7 +61,7 @@ def on_close(ws):
 
 
 def on_message(ws, message):
-    global closes, in_position
+    global closes, in_position, valor_fechamento
     global qtd_candle_closed
     global qtd_venda, qtd_compra
 
@@ -78,6 +78,7 @@ def on_message(ws, message):
 
     is_candle_closed = candle['x']
     close = candle['c']
+    valor_fechamento = close
 
     print(f'Quantidade de vezes que fechou: {qtd_candle_closed}')
 
@@ -119,54 +120,89 @@ def on_message(ws, message):
                     if order_succeeded:
                         in_position = True
                         qtd_compra += 1
-    stop()
-    # return jsonify({"message": "Não entre em pânico!"})
 
 
 
-
-
+@app.route('/intex_antigo')
+def index():
+    return render_template('index.html')
 
 
 
 ws = websocket.WebSocketApp(SOCKET, on_open=on_open, on_close=on_close, on_message=on_message)
+
+
+api_key = ''
+api_password = ''
+@app.route("/", methods=["POST", "GET"])
+def home():
+    global api_key
+    global api_password
+    global client
+    if request.method == "POST":
+        api_key = request.form.get("api_key")
+        api_password = request.form.get("api_secret")
+        moeda = request.form.get("moeda")
+        print(api_key)
+        print(api_password)
+        print(moeda)
+        client = Client(api_key, api_password)
+        return redirect(url_for('principal'))
+
+    return render_template('index.html')
+
+
+def funcaoSocket():
+    ws.run_forever()
+
+trava = False
+email = '123'
+@app.route('/principal')
+def principal():
+    global trava
+    global email
+    dt = str(datetime.now())
+    # os = platform.system()
+    # pyver = sys.version
+
+
+    print('Estou rodando')
+    if trava == True:
+        t2 = threading.Thread(name="Hello", target=funcaoSocket)
+        t2.start()
+        trava = True
+    return render_template('principal.html',
+                           title='Status',
+                           date=dt,
+                           operating_system='os',
+                           python_version='pyver', fechamento=qtd_candle_closed, valor=valor_fechamento,
+                           api_chave=api_key, api_senha=api_password)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+"""
+
+
+
 app = Flask(__name__)
 
 
-def chamaRotina():
-    # ws.keep_running = False
-    ws.run_forever()
-
-@app.route('/teste')
-def stop():
-    time(5)
-    stuff = "<h2> style='text-align: center'>Welcome to Python Flask Web Server</he>"
-    time(5)
-    return stuff
-
-def testForThread1():
-    print('Olha deu certo')
-
-@app.route('/vamos')
-def testForThread2():
-    print('Olha executou junto')
-    return 'pagina vamos'
+@app.route("/", methods=["POST", "GET"])
+def home():
+    if request.method == "POST":
+        todo = request.form.get("api_key")
+        api_password = request.form.get("api_secret")
+        moeda = request.form.get("moeda")
+        print(todo)
+        print(api_password)
+        print(moeda)
+        return render_template('principal.html')
+    return render_template('index.html')
 
 
-@app.route('/')
-def nao_entre_em_panico():
-    # if request.headers.get('Authorization') == '42':
-    #     return jsonify({"42": "a resposta para a vida, o universo e tudo mais"})
-    # return jsonify(string1)
-    t1 = threading.Thread(name="Hello1", target=testForThread1)  # tell thread what the target function is
-    # notice no function call braces for the function "testForThread1"
-    t1.start()  # tell the thread to execute the target function
-    t2 = threading.Thread(name="Hello1", target=testForThread2)
-    t2.start()
-    # chamaRotina()
-    return 'dasdasdas'
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-
+if __name__ == '__main__':
+    app.run(debug=True)
+"""
