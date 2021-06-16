@@ -13,4 +13,4 @@ Werkzeug
 requests
 urllib3
 regex
-Junja2
+Jinja2
