@@ -179,30 +179,6 @@ def principal():
                            api_chave=api_key, api_senha=api_password)
 
 
-port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
 
+app.run(host='0.0.0.0', port=5000)
 
-"""
-
-
-
-app = Flask(__name__)
-
-
-@app.route("/", methods=["POST", "GET"])
-def home():
-    if request.method == "POST":
-        todo = request.form.get("api_key")
-        api_password = request.form.get("api_secret")
-        moeda = request.form.get("moeda")
-        print(todo)
-        print(api_password)
-        print(moeda)
-        return render_template('principal.html')
-    return render_template('index.html')
-
-
-if __name__ == '__main__':
-    app.run()
-"""
