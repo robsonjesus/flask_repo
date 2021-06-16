@@ -11,5 +11,7 @@ numpy
 threadpoolctl
 Werkzeug
 requests
+request
 urllib3
 regex
+os

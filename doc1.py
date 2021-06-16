@@ -1,7 +1,7 @@
 
 import websocket, json, pprint, talib, numpy
 from werkzeug.utils import redirect
-
+import os
 import config
 from binance.client import Client
 from binance.enums import *
@@ -179,8 +179,8 @@ def principal():
                            api_chave=api_key, api_senha=api_password)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
 """
