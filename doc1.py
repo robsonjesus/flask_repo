@@ -25,5 +25,11 @@ def home():
     return render_template('index.html')
 
 
+const PORT = process.env.PORT || '8080'
+
+app = express();
+
+app.set("port", PORT)
+
 if __name__ == '__main__':
     app.run(debug=True)
