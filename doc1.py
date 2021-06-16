@@ -142,7 +142,6 @@ def stop():
     time(5)
     stuff = "<h2> style='text-align: center'>Welcome to Python Flask Web Server</he>"
     time(5)
-    app.run(host='0.0.0.0', port=port)
     return stuff
 
 
