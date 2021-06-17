@@ -1,5 +1,185 @@
-<label id="value_lable">
-    {% for suggestion in suggestions %}
-        {{ suggestion }}<br>
-    {% endfor %}
-</label>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GFG</title>
+    <style>
+
+    html {
+  font-family: "Lucida Sans", sans-serif;
+}
+
+    .header {
+  background-color: #9933cc;
+  background-image: linear-gradient(#0099cc, white);
+  color: #000000;
+  padding: 15px;
+    }
+     .button {
+     background-color: #555555;
+     border: none;
+     color: white;
+     padding: 15px 32px;
+     text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    }
+
+
+        #rcorners2 {
+        border-radius: 25px;
+        border: 2px solid #73AD21;
+        padding: 20px;
+         width: 200px;
+         height: 30px;
+         background-color: blue; /* For browsers that do not support gradients */
+         background-image: linear-gradient(blue, white);
+        }
+
+        #grad1 {
+                height: 200px;
+                background-color: blue; /* For browsers that do not support gradients */
+                background-image: linear-gradient(blue, white);
+                }
+
+.footer {
+  background-color: #0099cc;
+  color: #ffffff;
+  text-align: center;
+  font-size: 12px;
+  padding: 15px;
+}
+
+
+  @media only screen and (min-width: 600px) {
+  /* For tablets: */
+  .col-s-1 {width: 8.33%;}
+  .col-s-2 {width: 16.66%;}
+  .col-s-3 {width: 25%;}
+  .col-s-4 {width: 33.33%;}
+  .col-s-5 {width: 41.66%;}
+  .col-s-6 {width: 50%;}
+  .col-s-7 {width: 58.33%;}
+  .col-s-8 {width: 66.66%;}
+  .col-s-9 {width: 75%;}
+  .col-s-10 {width: 83.33%;}
+  .col-s-11 {width: 91.66%;}
+  .col-s-12 {width: 100%;}
+}
+
+@media only screen and (min-width: 768px) {
+  /* For desktop: */
+  .col-1 {width: 8.33%;}
+  .col-2 {width: 16.66%;}
+  .col-3 {width: 25%;}
+  .col-4 {width: 33.33%;}
+  .col-5 {width: 41.66%;}
+  .col-6 {width: 50%;}
+  .col-7 {width: 58.33%;}
+  .col-8 {width: 66.66%;}
+  .col-9 {width: 75%;}
+  .col-10 {width: 83.33%;}
+  .col-11 {width: 91.66%;}
+  .col-12 {width: 100%;}
+}
+
+    </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Parametros</h1>
+</div>
+        <div class="col-6 col-s-9">
+    <h1>Instruções</h1>
+    <p>Configure os parametros de trade com bastante atenção</p>
+
+  <form method="POST">
+
+
+      <div id="rcorners2" class="control">
+                    <input class="input is-large" type="text" name="api_key" placeholder="Yout API_KEY" autofocus="">
+                </div>
+
+
+
+                <div id="rcorners2" class="control">
+                    <input class="input is-large" type="password" name="api_secret" placeholder="Your API_SECRET">
+                </div>
+
+
+                <div class="control">
+                    <label for="moeda"><h3>Escolha a moeda:</h3></label>
+                    <select id="cars" name="moeda">
+                    <option value="BTCUSDT">BTCUSDT</option>
+                    <option value="BTCBRL">BTCBRL</option>
+                    </select>
+                </div>
+
+
+      <label><h2>Margem de Venda</h2></label>
+                 <div class="control">
+                    <input class="input is-large" type="text" name="rsi_upper" placeholder="RSI UPPER">
+                </div>
+
+        <label><h2>Margem de Compra</h2></label>
+            <div class="control">
+                    <input class="input is-large" type="text" name="rsi_lower" placeholder="RSI LOWER">
+                </div>
+
+      <label><h2>QTD de trade</h2></label>
+            <div class="control">
+                    <input class="input is-large" type="text" name="qtd_trade" placeholder="0.0000002">
+                </div>
+
+
+            <button type="submit" class="button">submit</button>
+    </form>
+
+
+<div class="col-3 col-s-12">
+    <div class="aside">
+      <h2>What?</h2>
+      <p>Chania is a city on the island of Crete.</p>
+      <h2>Where?</h2>
+      <p>Crete is a Greek island in the Mediterranean Sea.</p>
+      <h2>How?</h2>
+      <p>You can reach Chania airport from all over Europe.</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+        <!--Jquery Cdn -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"
+          integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+          crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    $(document).on('submit','#todo-form',function(e)
+                   {
+      console.log('hello');
+      e.preventDefault();
+      $.ajax({
+        type:'POST',
+        url:'/',
+        data:{
+          todo:$("#todo").val()
+        },
+        success:function()
+        {
+          alert('saved');
+        }
+      })
+    });
+  </script>
+
+<div class="footer">
+  <p>Copyring Robson Jesus rob.nogueira@terra.com.br</p>
+</div>
+
+</body>
+</html>
